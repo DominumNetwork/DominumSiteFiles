@@ -561,6 +561,10 @@
     <input id="urlInput" placeholder="Enter URL or search..." />
     <button id="go-button">Go</button>
     <button id="toggle-devtools">{ }</button>
+    <div id="theme-selector">
+      <button id="theme-button">🎨</button>
+      <div id="theme-menu"></div>
+    </div>
   </div>
   
   <div id="content">
@@ -619,6 +623,55 @@
     const tabs = [];
     let activeTabId = null;
     let tabCounter = 0;
+    
+    // Theme data & helpers
+    const availableThemes = [
+      { key: 'default', name: 'Purple', className: 'theme-default' },
+      { key: 'matrix', name: 'Matrix', className: 'theme-matrix' },
+      { key: 'tron', name: 'Tron', className: 'theme-tron' },
+      { key: 'light', name: 'Light', className: 'theme-light' }
+    ];
+
+    function applyTheme(key) {
+      const body = document.body;
+      availableThemes.forEach(t => body.classList.remove(t.className));
+      const themeObj = availableThemes.find(t => t.key === key) || availableThemes[0];
+      body.classList.add(themeObj.className);
+      localStorage.setItem('procksiTheme', key);
+      // update menu active state
+      document.querySelectorAll('.theme-option').forEach(opt => {
+        opt.classList.toggle('active', opt.dataset.theme === key);
+      });
+    }
+
+    function toggleThemeMenu(show) {
+      const menu = document.getElementById('theme-menu');
+      if (!menu) return;
+      if (typeof show === 'boolean') {
+        menu.classList.toggle('show', show);
+      } else {
+        menu.classList.toggle('show');
+      }
+    }
+
+    function initThemeSystem() {
+      const menu = document.getElementById('theme-menu');
+      if (!menu) return;
+      const stored = localStorage.getItem('procksiTheme') || 'default';
+      availableThemes.forEach(t => {
+        const div = document.createElement('div');
+        div.className = 'theme-option' + (t.key === stored ? ' active' : '');
+        div.textContent = t.name;
+        div.dataset.theme = t.key;
+        div.addEventListener('click', () => {
+          applyTheme(t.key);
+          toggleThemeMenu(false);
+          showNotification(`Theme changed to ${t.name}`);
+        });
+        menu.appendChild(div);
+      });
+      applyTheme(stored);
+    }
     
     // Animation helper functions
     function showLoadingOverlay() {
@@ -687,6 +740,16 @@
       
       // Load saved snippets from localStorage
       loadSavedSnippetsFromStorage();
+      initThemeSystem();
+      document.getElementById('theme-button').addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleThemeMenu();
+      });
+      document.addEventListener('click', (e) => {
+        if (!document.getElementById('theme-selector').contains(e.target)) {
+          toggleThemeMenu(false);
+        }
+      });
     });
     
     function createNewTab(url = null) {
