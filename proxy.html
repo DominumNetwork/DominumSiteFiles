@@ -547,6 +547,97 @@
     .notification.show {
       transform: translateX(0);
     }
+
+    /* ---- Theme Menu & Themes ---- */
+    #theme-selector {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    #theme-button {
+      background: rgba(0,0,0,0);
+      color: #d0f;
+      border: 1px solid #d0f;
+      padding: 0.5rem 0.75rem;
+      font-size: 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    #theme-button:hover {
+      background: #4a0055;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(221, 0, 255, 0.3);
+    }
+
+    #theme-button:active {
+      animation: buttonPress 0.1s ease;
+    }
+
+    #theme-menu {
+      position: absolute;
+      top: 110%;
+      right: 0;
+      background: #2a0033;
+      border: 1px solid #d0f;
+      border-radius: 4px;
+      display: none;
+      flex-direction: column;
+      min-width: 160px;
+      z-index: 2000;
+      transform-origin: top right;
+      transform: scale(0.8);
+      opacity: 0;
+      transition: all 0.2s ease;
+    }
+
+    #theme-menu.show {
+      display: flex;
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    .theme-option {
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      white-space: nowrap;
+      color: #d0f;
+    }
+
+    .theme-option:hover {
+      background: #4a0055;
+    }
+
+    .theme-option.active::before {
+      content: "✔ ";
+    }
+
+    /* Individual theme overrides using CSS filters */
+    body {
+      filter: var(--theme-filter, none);
+    }
+
+    body.theme-default {
+      --theme-filter: none;
+    }
+
+    body.theme-matrix {
+      /* Green neon Matrix look */
+      --theme-filter: hue-rotate(120deg) saturate(2) brightness(1.1);
+    }
+
+    body.theme-tron {
+      /* Cyan / blue Tron vibe */
+      --theme-filter: hue-rotate(180deg) saturate(2.5) brightness(1.15);
+    }
+
+    body.theme-light {
+      /* Light mode via inversion */
+      --theme-filter: invert(1) hue-rotate(180deg);
+    }
   </style>
 </head>
 <body>
