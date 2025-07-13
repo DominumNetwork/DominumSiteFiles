@@ -150,7 +150,8 @@
     
     #controls {
       padding: 0.5rem 1rem;
-      background: var(--bg-secondary);
+      /* Gradient to blend with tab bar */
+      background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 50%, var(--bg-quaternary) 100%);
       display: flex;
       gap: 0.75rem;
       align-items: center;
@@ -190,6 +191,16 @@
       position: relative;
       overflow: hidden;
     }
+
+    /* Ensure any inline SVGs inside buttons automatically match theme colour */
+    button svg {
+      width: 1.1em;
+      height: 1.1em;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      pointer-events: none;
+    }
     
     button:hover {
       background: var(--bg-accent);
@@ -209,7 +220,8 @@
     
     #tab-bar {
       display: flex;
-      background: var(--bg-secondary);
+      /* Same gradient as controls for seamless blend */
+      background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 50%, var(--bg-quaternary) 100%);
       border-bottom: 1px solid var(--border-primary);
       overflow-x: auto;
       scrollbar-width: thin;
@@ -230,7 +242,8 @@
     
     .tab {
       padding: 0.5rem 1rem;
-      background: var(--bg-tertiary);
+      /* Slight vertical gradient so the tab visually blends upward */
+      background: linear-gradient(180deg, var(--bg-tertiary) 0%, var(--bg-quaternary) 100%);
       border: 1px solid rgba(0,0,0,0);
       border-radius: 20% 20% 0% 0%;
       cursor: pointer;
@@ -253,7 +266,8 @@
     }
     
     .tab.active {
-      background: var(--bg-quaternary);
+      /* Accent a bit brighter but still gradient */
+      background: linear-gradient(180deg, var(--bg-quaternary) 0%, var(--bg-accent) 100%);
       border: 1px solid var(--border-secondary);
       transform: translateY(-2px);
       box-shadow: 0 2px 10px var(--shadow-secondary);
@@ -798,13 +812,25 @@
   </div>
   
   <div id="controls">
-    <button id="back-button"><</button>
-    <button id="forward-button">></button>
-    <button id="refresh-button">↻</button>
+    <button id="back-button" aria-label="Back">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <button id="forward-button" aria-label="Forward">
+      <svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
+    </button>
+    <button id="refresh-button" aria-label="Refresh">
+      <svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 13.49-5"/><path d="M20.49 15a9 9 0 0 1-13.49 5"/></svg>
+    </button>
     <input id="urlInput" placeholder="Enter URL or search..." />
-    <button id="go-button">Go</button>
-    <button id="themes-button">🎨</button>
-    <button id="toggle-devtools">{ }</button>
+    <button id="go-button" aria-label="Go / Search">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </button>
+    <button id="themes-button" aria-label="Themes">
+      <svg viewBox="0 0 24 24"><path d="M19 21c-.5-2-2.5-3-5-3s-4.5 1-5 3"/><circle cx="12" cy="7" r="4"/></svg>
+    </button>
+    <button id="toggle-devtools" aria-label="Toggle DevTools">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+    </button>
   </div>
   
   <div id="content">
