@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chromebook Unenroll Instructions - Shimboot Method</title>
+  <style>
+    body {
+      background-color: #000;
+      color: #C084FC;
+      font-family: 'Courier New', Courier, monospace;
+      padding: 40px;
+      line-height: 1.9;
+    }
+    h1, h2 {
+      color: #D9ABFF;
+    }
+    code, kbd {
+      background-color: #222;
+      color: #E0B3FF;
+      padding: 2px 5px;
+      border-radius: 4px;
+    }
+    ul {
+      margin-top: 10px;
+      margin-bottom: 30px;
+      padding-left: 25px;
+    }
+    ol {
+      margin-top: 10px;
+      margin-bottom: 30px;
+      padding-left: 25px;
+    }
+    li {
+      margin-bottom: 10px;
+    }
+    .note {
+      border: 1px solid #C084FC;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>⚠️ YOU WILL NEED A SEPARATE COMPUTER AND A USB DRIVE TO USE THIS METHOD</h1>
+
+  
+
+  <h2>Steps:</h2>
+
+  <ol>
+    <li>
+      <strong>Check Your Chrome OS Version:</strong>
+      <ul>
+        <li>On the managed Chromebook, go to <code>chrome://version</code>.</li>
+        <li>Find the version next to <strong>"Stable Channel."</strong></li>
+      </ul>
+    </li>
+
+    <li>
+      <strong>Download Shimboot for Your Version:</strong>
+      <ul>
+        <li>On a separate device, go to: <a href="https://github.com/ading2210/shimboot/releases/tag/v1.2.1" target="_blank">Shimboot GitHub Releases</a></li>
+        <li>Download the zip file that matches your Chromebook version.</li>
+        <li>Load the zip file onto a USB drive.</li>
+      </ul>
+    </li>
+
+    <li>
+      <strong>Install the Chromebook Recovery Utility:</strong>
+      <ul>
+        <li>On the same device, install from the Chrome Web Store:</li>
+        <li><a href="https://chromewebstore.google.com/detail/chromebook-recovery-utili/pocpnlppkickgojjlmhdmidojbmbodfm" target="_blank">Chromebook Recovery Utility</a></li>
+      </ul>
+    </li>
+
+    <li>
+      <strong>Write the Shimboot Image to USB:</strong>
+      <ul>
+        <li>Plug in the USB drive.</li>
+        <li>Open the Recovery Utility.</li>
+        <li>Click the top-right menu (gear icon) → <strong>"Use local image"</strong>.</li>
+        <li>Select the downloaded shimboot zip file and wait for completion.</li>
+      </ul>
+    </li>
+
+    <li>
+      <strong>Boot Chromebook into Recovery Mode:</strong>
+      <ul>
+        <li>On the Chromebook, press <kbd>ESC</kbd> + <kbd>Refresh ↻</kbd> + <kbd>Power ⏻</kbd>.</li>
+        <li>Then press <kbd>CTRL</kbd> + <kbd>D</kbd>.</li>
+        <li>Press <kbd>Enter</kbd> to enable developer mode.</li>
+      </ul>
+    </li>
+
+    <li>
+      <strong>Reboot to Developer Screen:</strong>
+      <ul>
+        <li>When prompted to go back to secure mode, press <kbd>ESC</kbd> + <kbd>Refresh ↻</kbd> + <kbd>Power ⏻</kbd> again.</li>
+      </ul>
+    </li>
+
+    <li>
+      <strong>Insert USB and Boot Shimboot:</strong>
+      <ul>
+        <li>Insert the prepared USB into the Chromebook.</li>
+        <li>In the bootloader screen, press the following keys, each followed by <kbd>Enter</kbd>:</li>
+        <li><code>2</code>, <code>1</code>, <code>y</code>, <code>y</code></li>
+        <li>Wait for it to load.</li>
+      </ul>
+    </li>
+
+    <li><strong>✅ Chromebook is Now Unenrolled!</strong></li>
+  </ol>
+
+  <div class="note">
+    <h2>📝 Things to Note:</h2>
+    <ul>
+      <li>🔋 Battery will drain 1.5x faster and charge more slowly in this state.</li>
+      <li>🚫 You cannot access or install apps from the App Store.</li>
+      <li>💀 If the Chromebook dies, you must repeat <strong>Steps 6–10</strong> and all data will be erased.</li>
+      <li>🛑 If your version is not <strong>DEDEDE</strong>, <strong>do not unplug the USB</strong> — doing so will require a full redo of Steps 6–10.</li>
+    </ul>
+  </div>
+
+</body>
+</html>
+
+
+
