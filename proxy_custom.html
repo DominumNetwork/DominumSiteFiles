@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>procksi (purple mode)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      /* Default theme (Purple) */
+      --bg-primary: #000;
+      --bg-secondary: #1a001a;
+      --bg-tertiary: #2a0033;
+      --bg-quaternary: #3a0044;
+      --bg-accent: #4a0055;
+      --text-primary: #d0f;
+      --text-secondary: #d0f9;
+      --border-primary: #d0f;
+      --border-secondary: rgba(221, 0, 255, 0.3);
+      --border-tertiary: #d0f3;
+      --accent-primary: #ff00ff;
+      --accent-secondary: #d0f;
+      --shadow-primary: rgba(221, 0, 255, 0.5);
+      --shadow-secondary: rgba(221, 0, 255, 0.3);
+      --shadow-tertiary: rgba(221, 0, 255, 0.2);
+      --error-color: #f00;
+      --warning-color: #ff0;
+      --info-color: #0ff;
+      --success-color: #0f0;
+      --transition-speed: 0.3s;
+    }
+
+    * {
+      box-sizing: border-box;
+      transition: background-color var(--transition-speed) ease,
+                  color var(--transition-speed) ease,
+                  border-color var(--transition-speed) ease,
+                  box-shadow var(--transition-speed) ease;
+    }
+
+    body {
+      margin: 0;
+      font-family: monospace;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+    }
+    /* ... existing code ... */
+  </style>
+  <style>
+    /* Custom Theme Modal Styles */
+    .custom-theme-modal {
+      position: fixed;
+      inset: 0;
+      backdrop-filter: blur(4px);
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 3000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease;
+    }
+
+    .custom-theme-modal.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .custom-modal-inner {
+      background: var(--bg-secondary);
+      border: 2px solid var(--border-primary);
+      border-radius: 12px;
+      width: 90%;
+      max-width: 1100px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .custom-modal-header,
+    .custom-modal-footer {
+      padding: 0.75rem 1rem;
+      background: var(--bg-tertiary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-primary);
+    }
+
+    .custom-modal-footer {
+      border-top: 1px solid var(--border-primary);
+      border-bottom: none;
+    }
+
+    .custom-close {
+      background: none;
+      border: none;
+      color: var(--text-primary);
+      font-size: 1.5rem;
+      cursor: pointer;
+      border-radius: 50%;
+      transition: background 0.3s ease;
+    }
+
+    .custom-close:hover {
+      background: var(--bg-accent);
+    }
+
+    .custom-modal-title {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: var(--text-primary);
+    }
+
+    .custom-modal-body {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      overflow: hidden;
+    }
+
+    #custom-input-grid {
+      padding: 1rem;
+      overflow-y: auto;
+    }
+
+    .custom-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .custom-group-title {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--accent-primary);
+    }
+
+    .custom-input-row {
+      display: grid;
+      grid-template-columns: 130px 80px repeat(4, 1fr);
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .custom-input-row label {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .custom-input-row input[type="color"],
+    .custom-input-row input[type="range"] {
+      width: 100%;
+    }
+
+    /* Preview section */
+    #custom-preview {
+      padding: 1rem;
+      border-left: 1px solid var(--border-primary);
+      background: var(--bg-secondary);
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      overflow-y: auto;
+    }
+
+    .preview-box {
+      padding: 0.75rem;
+      border: 1px solid var(--border-secondary);
+      border-radius: 6px;
+    }
+
+    .preview-title {
+      font-size: 0.9rem;
+      margin-bottom: 0.25rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- ... existing HTML markup identical to user supplied code up to Themes Panel ... -->
+  <!-- Themes Panel (unchanged) -->
+  <!-- ... existing code ... -->
+  <!-- Custom Theme Modal -->
+  <div id="custom-theme-modal" class="custom-theme-modal">
+    <div class="custom-modal-inner">
+      <div class="custom-modal-header">
+        <span class="custom-modal-title">🎨 Build Your Custom Theme</span>
+        <button id="close-custom-modal" class="custom-close">×</button>
+      </div>
+      <div class="custom-modal-body">
+        <div id="custom-input-grid"></div>
+        <div id="custom-preview">
+          <div class="preview-box" style="background: var(--bg-primary); color: var(--text-primary);">
+            <div class="preview-title">Primary Background & Text</div>
+            <p>The quick brown fox jumps over the lazy dog.</p>
+          </div>
+          <div class="preview-box" style="background: var(--bg-accent); color: var(--text-primary);">
+            <div class="preview-title">Accent Background</div>
+            <button class="theme-button">Button</button>
+          </div>
+          <div class="preview-box" style="border-color: var(--border-primary); color: var(--text-primary);">
+            <div class="preview-title">Borders & Shadows</div>
+            <div style="width: 50px; height: 50px; background: var(--accent-primary); box-shadow: 0 0 10px var(--shadow-primary);"></div>
+          </div>
+        </div>
+      </div>
+      <div class="custom-modal-footer">
+        <button class="theme-button" id="cancel-custom">Cancel</button>
+        <button class="theme-button primary" id="save-custom">Save Theme</button>
+      </div>
+    </div>
+  </div>
+  <!-- ... existing scripts ... -->
+  <script>
+    // ... existing code up to themes definition ...
+    // ... existing themes object ...
+    // Add placeholder for custom
+    themes.custom = {
+      name: "Custom",
+      description: "Your personalised palette",
+      colors: {},
+      preview: ["#d0f", "#ff00ff", "#2a0033", "#4a0055", "#000"],
+    };
+
+    // Logical groups for organisation in editor
+    const colorGroups = {
+      Backgrounds: ['--bg-primary', '--bg-secondary', '--bg-tertiary', '--bg-quaternary', '--bg-accent'],
+      Text: ['--text-primary', '--text-secondary'],
+      Borders: ['--border-primary', '--border-secondary', '--border-tertiary'],
+      Accents: ['--accent-primary', '--accent-secondary'],
+      Shadows: ['--shadow-primary', '--shadow-secondary', '--shadow-tertiary'],
+      States: ['--error-color', '--warning-color', '--info-color', '--success-color']
+    };
+
+    // Load saved custom colors if present
+    const savedCustomColors = JSON.parse(localStorage.getItem('procksiCustomTheme') || 'null');
+    if (savedCustomColors) {
+      themes.custom.colors = savedCustomColors;
+    } else {
+      // Start with purple defaults
+      themes.custom.colors = { ...themes.purple.colors };
+    }
+
+    function openCustomThemeModal() {
+      const modal = document.getElementById('custom-theme-modal');
+      const grid = document.getElementById('custom-input-grid');
+      grid.innerHTML = '';
+
+      // Build groups
+      Object.entries(colorGroups).forEach(([groupName, vars]) => {
+        const groupWrap = document.createElement('div');
+        groupWrap.className = 'custom-group';
+        const title = document.createElement('div');
+        title.className = 'custom-group-title';
+        title.textContent = groupName;
+        groupWrap.appendChild(title);
+
+        vars.forEach(v => {
+          const current = themes.custom.colors[v] || themes.purple.colors[v];
+          const rgba = parseColor(current);
+
+          const row = document.createElement('div');
+          row.className = 'custom-input-row';
+
+          row.innerHTML = `
+            <label>${v.replace('--', '')}</label>
+            <input type="color" value="${rgbaToHex(rgba)}" data-type="color" data-var="${v}">
+            <input type="range" min="0" max="360" step="1" value="${rgbToHsl(rgba).h}" data-type="h" data-var="${v}" title="Hue">
+            <input type="range" min="0" max="100" step="1" value="${rgbToHsl(rgba).s}" data-type="s" data-var="${v}" title="Saturation">
+            <input type="range" min="0" max="100" step="1" value="${rgbToHsl(rgba).l}" data-type="l" data-var="${v}" title="Lightness">
+            <input type="range" min="0" max="100" step="1" value="${Math.round(rgba.a * 100)}" data-type="alpha" data-var="${v}" title="Opacity">
+          `;
+
+          groupWrap.appendChild(row);
+        });
+
+        grid.appendChild(groupWrap);
+      });
+
+      // Attach listeners
+      grid.querySelectorAll('input').forEach(input => {
+        input.addEventListener('input', handleControlChange);
+      });
+
+      updateCustomPreview();
+      modal.classList.add('active');
+    }
+
+    function closeCustomThemeModal() {
+      document.getElementById('custom-theme-modal').classList.remove('active');
+    }
+
+    function saveCustomTheme() {
+      // Persist current custom colors
+      localStorage.setItem('procksiCustomTheme', JSON.stringify(themes.custom.colors));
+      // Update preview palette
+      themes.custom.preview = Object.values(themes.custom.colors).slice(0,5);
+      // Refresh theme cards so custom shows updated preview
+      generateThemeCards();
+      // Apply and close
+      applyTheme('custom');
+      closeCustomThemeModal();
+    }
+
+    function toHex(color) {
+       // crude rgba/hex -> hex converter
+       if (color.startsWith('#')) return color;
+       const ctx = document.createElement('canvas').getContext('2d');
+       ctx.fillStyle = color;
+       return ctx.fillStyle;
+     }
+
+    // ============ Color Helpers ============= //
+    function parseColor(col) {
+      // returns {r, g, b, a}
+      const ctx = document.createElement('canvas').getContext('2d');
+      ctx.fillStyle = col;
+      const computed = ctx.fillStyle; // hex or rgba
+      if (computed.startsWith('#')) {
+        const bigint = parseInt(computed.slice(1), 16);
+        const r = (bigint >> 16) & 255;
+        const g = (bigint >> 8) & 255;
+        const b = bigint & 255;
+        return { r, g, b, a: 1 };
+      } else if (computed.startsWith('rgba')) {
+        const parts = computed.match(/rgba\((\d+),\s*(\d+),\s*(\d+),\s*([\d.]+)\)/);
+        if (parts) {
+          return { r: +parts[1], g: +parts[2], b: +parts[3], a: +parts[4] };
+        }
+      } else if (computed.startsWith('rgb')) {
+        const parts = computed.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+        if (parts) {
+          return { r: +parts[1], g: +parts[2], b: +parts[3], a: 1 };
+        }
+      }
+      // fallback to purple
+      return { r: 208, g: 0, b: 255, a: 1 };
+    }
+
+    function rgbaToHex({ r, g, b }) {
+      return '#' + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('');
+    }
+
+    function buildCSSColor({ r, g, b, a }) {
+      if (a === 1) return rgbaToHex({ r, g, b });
+      return `rgba(${r}, ${g}, ${b}, ${a.toFixed(2)})`;
+    }
+
+    function rgbToHsl({ r, g, b }) {
+      r /= 255; g /= 255; b /= 255;
+      const max = Math.max(r, g, b), min = Math.min(r, g, b);
+      let h, s, l = (max + min) / 2;
+      if (max === min) {
+        h = s = 0; // achromatic
+      } else {
+        const d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        switch(max){
+          case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+          case g: h = (b - r) / d + 2; break;
+          case b: h = (r - g) / d + 4; break;
+        }
+        h *= 60;
+      }
+      return { h: Math.round(h || 0), s: Math.round(s * 100), l: Math.round(l * 100) };
+    }
+
+    function hslToRgb(h, s, l) {
+      s /= 100; l /= 100;
+      const c = (1 - Math.abs(2 * l - 1)) * s;
+      const x = c * (1 - Math.abs((h / 60) % 2 - 1));
+      const m = l - c/2;
+      let r1,g1,b1;
+      if (h < 60) { r1 = c; g1 = x; b1 = 0; }
+      else if (h < 120) { r1 = x; g1 = c; b1 = 0; }
+      else if (h < 180) { r1 = 0; g1 = c; b1 = x; }
+      else if (h < 240) { r1 = 0; g1 = x; b1 = c; }
+      else if (h < 300) { r1 = x; g1 = 0; b1 = c; }
+      else { r1 = c; g1 = 0; b1 = x; }
+      const r = Math.round((r1 + m) * 255);
+      const g = Math.round((g1 + m) * 255);
+      const b = Math.round((b1 + m) * 255);
+      return { r, g, b };
+    }
+
+    function handleControlChange(e) {
+      const input = e.target;
+      const variable = input.dataset.var;
+      const type = input.dataset.type;
+      const colorPicker = document.querySelector(`input[data-type="color"][data-var="${variable}"]`);
+      const alphaSlider = document.querySelector(`input[data-type="alpha"][data-var="${variable}"]`);
+      const hSlider = document.querySelector(`input[data-type="h"][data-var="${variable}"]`);
+      const sSlider = document.querySelector(`input[data-type="s"][data-var="${variable}"]`);
+      const lSlider = document.querySelector(`input[data-type="l"][data-var="${variable}"]`);
+
+      let rgba = parseColor(themes.custom.colors[variable] || themes.purple.colors[variable]);
+
+      if (type === 'color') {
+        rgba = { ...rgba, ...parseColor(input.value) };
+        const hsl = rgbToHsl(rgba);
+        hSlider.value = hsl.h;
+        sSlider.value = hsl.s;
+        lSlider.value = hsl.l;
+      } else if (type === 'alpha') {
+        rgba.a = parseInt(input.value, 10) / 100;
+      } else if (type === 'h' || type === 's' || type === 'l') {
+        const h = parseInt(hSlider.value, 10);
+        const s = parseInt(sSlider.value, 10);
+        const l = parseInt(lSlider.value, 10);
+        const rgb = hslToRgb(h, s, l);
+        rgba = { ...rgba, ...rgb };
+        colorPicker.value = rgbaToHex(rgb);
+      }
+
+      // update stored color
+      const cssColor = buildCSSColor(rgba);
+      themes.custom.colors[variable] = cssColor;
+
+      // sync UI elements
+      colorPicker.value = rgbaToHex(rgba);
+      alphaSlider.value = Math.round(rgba.a * 100);
+
+      // live preview
+      updateCustomPreview();
+    }
+
+    function updateCustomPreview() {
+      const preview = document.getElementById('custom-preview');
+      if (!preview) return;
+      Object.entries(themes.custom.colors).forEach(([prop, val]) => {
+        preview.style.setProperty(prop, val);
+      });
+    }
+
+    // Extend generateThemeCards to add custom card and a button to open editor
+    const _generateThemeCards = generateThemeCards;
+    generateThemeCards = function() {
+      _generateThemeCards();
+      // Append customise button to custom card
+      const customCard = document.querySelector('.theme-card[data-theme-id="custom"]');
+      if (customCard && !customCard.querySelector('.customise-btn')) {
+        const btn = document.createElement('button');
+        btn.textContent = 'Edit';
+        btn.className = 'theme-button small customise-btn';
+        btn.addEventListener('click', e => {
+          e.stopPropagation();
+          selectedTheme = 'custom';
+          openCustomThemeModal();
+        });
+        customCard.appendChild(btn);
+      }
+    };
+
+    // Attach modal events
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('save-custom').addEventListener('click', saveCustomTheme);
+      document.getElementById('cancel-custom').addEventListener('click', closeCustomThemeModal);
+      document.getElementById('close-custom-modal').addEventListener('click', closeCustomThemeModal);
+    });
+  </script>
+</body>
+</html>
