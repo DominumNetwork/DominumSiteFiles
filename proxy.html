@@ -307,7 +307,7 @@
       createNewTab();
       
       // Set up event listeners
-      document.getElementById('new-tab').addEventListener('click', createNewTab);
+      document.getElementById('new-tab').addEventListener('click', () => createNewTab());
       document.getElementById('go-button').addEventListener('click', loadPageInActiveTab);
       document.getElementById('toggle-devtools').addEventListener('click', toggleDevTools);
       document.getElementById('close-devtools').addEventListener('click', closeDevTools);
