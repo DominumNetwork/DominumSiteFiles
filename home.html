@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="shortcut icon" href="img.png" type="image/x-icon" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+ html, body, button, a, div, nav, ul, li {
+  cursor: none !important;
+}
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Poppins', sans-serif;
+      background: radial-gradient(ellipse at center, #0d001f 0%, #000010 100%);
+      color: white;
+      overflow: hidden;
+      user-select: none;
+      cursor: none; 
+    }
+
+    .lefty {
+      position: fixed;
+      top: 15px;
+      left: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 16px;
+      background: rgba(255, 255, 255, 0.06);
+      padding: 10px 16px;
+      border-radius: 14px;
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      z-index: 10;
+    }
+
+    .batteryicon {
+      width: 23px;
+      height: 23px;
+      stroke: #50fa7b;
+      stroke-width: 1.5;
+    }
+
+    .texty-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      z-index: 2;
+    }
+
+    .titletexthing {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .titletexthing img {
+      height: 240px;
+      max-width: 90vw;
+      margin-bottom: 12px;
+      display: block;
+      filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.15));
+    }
+
+    .titletexthing h1 {
+      font-weight: 900;
+      font-size: 84px;
+      background: linear-gradient(to right, #38e971, #25ab9c, #6481df, #d357f4, #cfacf6, #38e971);
+      background-size: 200%;
+      border-radius: 20px;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: texty 5s linear infinite;
+      text-shadow: 0 0 35px rgba(255, 255, 255, 0.08);
+      user-select: none;
+      margin: 0;
+    }
+
+    @keyframes texty {
+      0% {
+        background-position: 0%;
+      }
+      100% {
+        background-position: 200%;
+      }
+    }
+
+    /* HAMBURGER (real) */
+    .hamburger {
+      position: fixed;
+      top: 15px;
+      right: 20px;
+      z-index: 11;
+      cursor: pointer;
+      width: 32px;
+      height: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .hamburger .bar {
+      height: 4px;
+      border-radius: 2px;
+      background: white;
+      transition: all 0.4s ease;
+    }
+
+    .hamburger.active .top {
+      transform: rotate(45deg) translateY(8px);
+    }
+
+    .hamburger.active .middle {
+      opacity: 0;
+    }
+
+    .hamburger.active .bottom {
+      transform: rotate(-45deg) translateY(-8px);
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      right: -300px;
+      width: 260px;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.06);
+      border-left: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(12px);
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      transition: right 0.5s ease;
+    }
+
+    .sidebar.active {
+      right: 0;
+    }
+
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      text-align: center;
+    }
+
+    .sidebar ul li {
+      margin: 20px 0;
+    }
+
+    .sidebar ul li a {
+      font-size: 28px;
+      font-weight: 900;
+      text-decoration: none;
+      background: linear-gradient(to right, #38e971, #25ab9c, #6481df, #d357f4, #cfacf6, #38e971);
+      background-size: 200%;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: texty 5s linear infinite;
+      text-shadow: 0 0 35px rgba(255, 255, 255, 0.08);
+      transition: transform 0.3s ease;
+      display: inline-block;
+      cursor: pointer; /* cursor none on html but pointer here for user feedback */
+    }
+
+    .sidebar ul li a:hover {
+      transform: scale(1.1);
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .titletexthing img {
+        height: 160px;
+      }
+
+      .titletexthing h1 {
+        font-size: 48px;
+      }
+
+      .lefty {
+        font-size: 14px;
+        padding: 8px 12px;
+      }
+
+      .batteryicon {
+        width: 18px;
+        height: 18px;
+      }
+
+      .sidebar ul li a {
+        font-size: 20px;
+      }
+
+      .hamburger {
+        width: 28px;
+        height: 20px;
+      }
+
+      .hamburger .bar {
+        height: 3px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="lefty">
+    <svg class="batteryicon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M16 7H4a2 2 0 00-2 2v6a2 2 0 002 2h12a2 2 0 002-2V9a2 2 0 00-2-2zm4 4v2" />
+    </svg>
+    <span id="battery-level">100%</span>
+  </div>
+
+  <div class="texty-container">
+    <div class="titletexthing">
+      <img src="https://codehs.com/uploads/39e50783014f84b22616ad0a139b1e54" alt="Dominum logo" class="animate__animated animate__zoomInDown" />
+      <h1 class="animate__animated animate__fadeInDown">DOMINUM</h1>
+    </div>
+  </div>
+
+  <div class="hamburger" data-cursor="block" onclick="toggleNav(this)">
+    <div class="bar top"></div>
+    <div class="bar middle"></div>
+    <div class="bar bottom"></div>
+  </div>
+
+  <nav class="sidebar" id="sidebar">
+    <ul>
+      <li><a href="#" data-cursor="block">Home</a></li>
+      <li><a href="#" data-cursor="block">Games</a></li>
+      <li><a href="#" data-cursor="block">Theater</a></li>
+      <li><a href="#" data-cursor="block">Live Chat</a></li>
+      <li><a href="#" data-cursor="block">Hacks/Exploits</a></li>
+      <li><a href="#" data-cursor="block">About</a></li>
+      <li><a href="#" data-cursor="block">Credits</a></li>
+    </ul>
+  </nav>
+
+  <script>
+    function updateBatteryStatus(battery) {
+      const level = Math.round(battery.level * 100);
+      const batteryText = document.getElementById('battery-level');
+      const icon = document.querySelector('.batteryicon');
+
+      batteryText.textContent = level + '%';
+
+      if (level > 75) {
+        icon.style.stroke = '#50fa7b';
+      } else if (level > 40) {
+        icon.style.stroke = '#f1fa8c';
+      } else if (level > 15) {
+        icon.style.stroke = '#ffb86c';
+      } else {
+        icon.style.stroke = '#ff5555';
+      }
+    }
+
+    if (navigator.getBattery) {
+      navigator.getBattery().then(battery => {
+        updateBatteryStatus(battery);
+        battery.addEventListener('levelchange', () => updateBatteryStatus(battery));
+      });
+    } else {
+      document.getElementById('battery-level').textContent = 'Battery unsupported';
+    }
+
+    function toggleNav(button) {
+      button.classList.toggle('active');
+      document.getElementById('sidebar').classList.toggle('active');
+    }
+  </script>
+
+  <script type="module">
+    import { initCursor } from "https://unpkg.com/ipad-cursor@latest";
+    initCursor({
+      style: {
+        snap: true,
+        scale: 1.1,
+        background: "rgba(255 255 255 / 0.1)",
+        innerDot: true,
+      },
+    });
+  </script>
+
+</body>
+</html>
