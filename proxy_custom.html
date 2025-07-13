@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>procksi (purple mode)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      /* Default theme (Purple) */
+      --bg-primary: #000;
+      --bg-secondary: #1a001a;
+      --bg-tertiary: #2a0033;
+      --bg-quaternary: #3a0044;
+      --bg-accent: #4a0055;
+      --text-primary: #d0f;
+      --text-secondary: #d0f9;
+      --border-primary: #d0f;
+      --border-secondary: rgba(221, 0, 255, 0.3);
+      --border-tertiary: #d0f3;
+      --accent-primary: #ff00ff;
+      --accent-secondary: #d0f;
+      --shadow-primary: rgba(221, 0, 255, 0.5);
+      --shadow-secondary: rgba(221, 0, 255, 0.3);
+      --shadow-tertiary: rgba(221, 0, 255, 0.2);
+      --error-color: #f00;
+      --warning-color: #ff0;
+      --info-color: #0ff;
+      --success-color: #0f0;
+      --transition-speed: 0.3s;
+    }
+
+    * {
+      box-sizing: border-box;
+      transition: background-color var(--transition-speed) ease,
+                  color var(--transition-speed) ease,
+                  border-color var(--transition-speed) ease,
+                  box-shadow var(--transition-speed) ease;
+    }
+
+    body {
+      margin: 0;
+      font-family: monospace;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+    }
+    /* ... existing code ... */
+  </style>
+</head>
+<body>
+  <!-- ... existing HTML markup identical to user supplied code up to Themes Panel ... -->
+  <!-- Themes Panel (unchanged) -->
+  <!-- ... existing code ... -->
+  <!-- Custom Theme Modal -->
+  <div id="custom-theme-modal" class="custom-theme-modal">
+    <div class="custom-modal-inner">
+      <div class="custom-modal-header">
+        <span class="custom-modal-title">🎨 Build Your Custom Theme</span>
+        <button id="close-custom-modal" class="custom-close">×</button>
+      </div>
+      <div class="custom-modal-body" id="custom-input-grid">
+        <!-- Color pickers injected via JS -->
+      </div>
+      <div class="custom-modal-footer">
+        <button class="theme-button" id="cancel-custom">Cancel</button>
+        <button class="theme-button primary" id="save-custom">Save Theme</button>
+      </div>
+    </div>
+  </div>
+  <!-- ... existing scripts ... -->
+  <script>
+    // ... existing code up to themes definition ...
+    // ... existing themes object ...
+    // Add placeholder for custom
+    themes.custom = {
+      name: "Custom",
+      description: "Your personalised palette",
+      colors: {},
+      preview: ["#d0f", "#ff00ff", "#2a0033", "#4a0055", "#000"],
+    };
+
+    // Load saved custom colors if present
+    const savedCustomColors = JSON.parse(localStorage.getItem('procksiCustomTheme') || 'null');
+    if (savedCustomColors) {
+      themes.custom.colors = savedCustomColors;
+    } else {
+      // Start with purple defaults
+      themes.custom.colors = { ...themes.purple.colors };
+    }
+
+    function openCustomThemeModal() {
+      const modal = document.getElementById('custom-theme-modal');
+      const grid = document.getElementById('custom-input-grid');
+      grid.innerHTML = '';
+      const colorKeys = Object.keys(themes.purple.colors);
+      colorKeys.forEach(key => {
+        const current = themes.custom.colors[key] || themes.purple.colors[key];
+        const row = document.createElement('div');
+        row.className = 'custom-input-row';
+        row.innerHTML = `
+          <label>${key.replace('--', '')}</label>
+          <input type="color" value="${toHex(current)}" data-var="${key}">
+        `;
+        grid.appendChild(row);
+      });
+      modal.classList.add('active');
+    }
+
+    function closeCustomThemeModal() {
+      document.getElementById('custom-theme-modal').classList.remove('active');
+    }
+
+    function saveCustomTheme() {
+      // Read values
+      document.querySelectorAll('#custom-input-grid input[type="color"]').forEach(inp => {
+        const variable = inp.dataset.var;
+        themes.custom.colors[variable] = inp.value;
+      });
+      // Persist
+      localStorage.setItem('procksiCustomTheme', JSON.stringify(themes.custom.colors));
+      // Update preview palette
+      themes.custom.preview = Object.values(themes.custom.colors).slice(0,5);
+      // Refresh theme cards so custom shows updated preview
+      generateThemeCards();
+      // Apply and close
+      applyTheme('custom');
+      closeCustomThemeModal();
+    }
+
+    function toHex(color) {
+      // crude rgba/hex -> hex converter
+      if (color.startsWith('#')) return color;
+      const ctx = document.createElement('canvas').getContext('2d');
+      ctx.fillStyle = color;
+      return ctx.fillStyle;
+    }
+
+    // Extend generateThemeCards to add custom card and a button to open editor
+    const _generateThemeCards = generateThemeCards;
+    generateThemeCards = function() {
+      _generateThemeCards();
+      // Append customise button to custom card
+      const customCard = document.querySelector('.theme-card[data-theme-id="custom"]');
+      if (customCard && !customCard.querySelector('.customise-btn')) {
+        const btn = document.createElement('button');
+        btn.textContent = 'Edit';
+        btn.className = 'theme-button small customise-btn';
+        btn.addEventListener('click', e => {
+          e.stopPropagation();
+          selectedTheme = 'custom';
+          openCustomThemeModal();
+        });
+        customCard.appendChild(btn);
+      }
+    };
+
+    // Attach modal events
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('save-custom').addEventListener('click', saveCustomTheme);
+      document.getElementById('cancel-custom').addEventListener('click', closeCustomThemeModal);
+      document.getElementById('close-custom-modal').addEventListener('click', closeCustomThemeModal);
+    });
+  </script>
+</body>
+</html>
